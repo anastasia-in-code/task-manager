@@ -4,18 +4,15 @@ from app.models import Task
 
 @pytest.fixture
 def app():
-    app = create_app()
-    app.config['TESTING'] = True
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
+    app = create_app(testing=True)
+    yield app
     with app.app_context():
-        db.create_all()
-        yield app
+        db.session.remove()
         db.drop_all()
 
 @pytest.fixture
 def client(app):
     return app.test_client()
-
 
 def test_get_tasks_success(client):
     response = client.get('/tasks')

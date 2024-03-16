@@ -4,9 +4,12 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
-def create_app():
+def create_app(testing=False):
     app = Flask(__name__)
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///tasks.db'
+    if testing:
+        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
+    else:
+        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///tasks.db'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     
     CORS(app)
