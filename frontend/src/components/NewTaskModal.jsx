@@ -6,6 +6,7 @@ import Form from "react-bootstrap/Form";
 const NewTaskModal = (props) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [completed, setCompleted] = useState(false);
 
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
@@ -15,13 +16,17 @@ const NewTaskModal = (props) => {
     setDescription(e.target.value);
   };
 
+  const handleCompletedChange = (e) => {
+    setCompleted(e.target.checked);
+  };
+
   const handleSubmit = () => {
     fetch("http://127.0.0.1:5000/tasks", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ title, description }),
+      body: JSON.stringify({ title, description, completed }),
     })
       .then((response) => {
         if (response.ok) {
@@ -57,6 +62,15 @@ const NewTaskModal = (props) => {
               type="text"
               value={title}
               onChange={handleTitleChange}
+            />
+          </Form.Group>
+          <Form.Group controlId="formBasicCheckbox">
+            <Form.Check
+              type="switch"
+              id="custom-switch"
+              label="Completed"
+              checked={completed}
+              onChange={handleCompletedChange}
             />
           </Form.Group>
           <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
