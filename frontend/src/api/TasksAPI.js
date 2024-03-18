@@ -25,6 +25,14 @@ class TasksAPI {
     }
   }
 
+  /**
+   * Updates a task by sending a PUT request to the specified API endpoint with the updated task details.
+   * @param {number} id - The ID of the task to be updated.
+   * @param {string} title - The updated title of the task.
+   * @param {string} description - The updated description of the task.
+   * @param {boolean} completed - The updated completion status of the task.
+   * @returns {Promise<object>} - The updated task object returned by the API.
+   */
   async updateTask(id, title, description, completed) {
     try {
       const response = await axios.put(`${this.BASE_URL}/${id}`, {
@@ -39,9 +47,16 @@ class TasksAPI {
     }
   }
 
+  /**
+   * Adds a new task by sending a POST request to the specified API endpoint with the task details.
+   * @param {string} title - The title of the new task.
+   * @param {string} description - The description of the new task.
+   * @param {boolean} completed - The completion status of the new task.
+   * @returns {Promise<Object>} - The newly added task object returned by the API.
+   */
   async addNewTask(title, description, completed) {
     try {
-      const response = await axios.post(`${this.BASE_URL}`, {
+      const response = await axios.post(this.BASE_URL, {
         title,
         description,
         completed,
@@ -53,14 +68,18 @@ class TasksAPI {
     }
   }
 
-  async deleteTask (id) {
+  /**
+   * Deletes a task by sending a DELETE request to the specified API endpoint with the task ID.
+   * @param {number} id - The ID of the task to be deleted.
+   * @returns {Promise<object>} - The deleted task object returned by the API.
+   */
+  async deleteTask(id) {
     try {
-        const response = await axios.delete(`${this.BASE_URL}/${id}`);
-
-        return response.data;
-      } catch (error) {
-        console.error("Error occurred while deleting task:", error);
-      }
+      const response = await axios.delete(`${this.BASE_URL}/${id}`);
+      return response.data;
+    } catch (error) {
+      console.error("Error occurred while deleting task:", error);
+    }
   }
 }
 
