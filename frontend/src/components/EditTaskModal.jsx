@@ -3,14 +3,14 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 
-const NewTaskModal = (props) => {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [completed, setCompleted] = useState(false);
+const EditTaskModal = (props) => {
+  const [title, setTitle] = useState(props.task.title);
+  const [description, setDescription] = useState(props.task.description);
+  const [completed, setCompleted] = useState(props.task.completed);
 
   const handleSubmit = () => {
-    fetch("http://127.0.0.1:5000/tasks", {
-      method: "POST",
+    fetch(`http://127.0.0.1:5000/tasks/${props.task.id}`, {
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
@@ -19,8 +19,6 @@ const NewTaskModal = (props) => {
       .then((response) => {
         if (response.ok) {
           props.onHide();
-          setTitle("");
-          setDescription("");
         } else {
           console.error("Error adding task:", response.statusText);
         }
@@ -51,7 +49,7 @@ const NewTaskModal = (props) => {
     >
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
-          Add New Task
+          Edit Task
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
@@ -86,11 +84,11 @@ const NewTaskModal = (props) => {
       </Modal.Body>
       <Modal.Footer>
         <Button onClick={handleSubmit}>
-          Add
+          Update
         </Button>
       </Modal.Footer>
     </Modal>
   );
 };
 
-export default NewTaskModal;
+export default EditTaskModal;

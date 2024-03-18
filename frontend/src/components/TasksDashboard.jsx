@@ -23,7 +23,7 @@ const TasksDashboard = () => {
         setShowNewTaskForm={setShowNewTaskForm}
       />
       <NewTaskModal show={showNewTaskForm} onHide={()=> setShowNewTaskForm(false)}/>
-      <TaskDetails tasks={tasks} selectedTask={selectedTask} />
+      <TaskDetails tasks={tasks} selectedTask={selectedTask}/>
     </div>
   );
 };
