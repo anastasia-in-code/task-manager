@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
+import { StateActions, useTasksDispatch } from "../context/TasksContainer";
 
 const EditTaskModal = (props) => {
+  const dispatch = useTasksDispatch();
   const [title, setTitle] = useState(props.task.title);
   const [description, setDescription] = useState(props.task.description);
   const [completed, setCompleted] = useState(props.task.completed);
@@ -18,6 +20,15 @@ const EditTaskModal = (props) => {
     })
       .then((response) => {
         if (response.ok) {
+          dispatch({
+            type: StateActions.UPDATE_TASK,
+            payload: {
+              id: props.task.id,
+              title,
+              description,
+              completed,
+            },
+          });
           props.onHide();
         } else {
           console.error("Error adding task:", response.statusText);
@@ -48,9 +59,7 @@ const EditTaskModal = (props) => {
       centered
     >
       <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">
-          Edit Task
-        </Modal.Title>
+        <Modal.Title id="contained-modal-title-vcenter">Edit Task</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form>
@@ -83,9 +92,7 @@ const EditTaskModal = (props) => {
         </Form>
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={handleSubmit}>
-          Update
-        </Button>
+        <Button onClick={handleSubmit}>Update</Button>
       </Modal.Footer>
     </Modal>
   );

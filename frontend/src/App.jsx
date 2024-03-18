@@ -1,10 +1,13 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import TasksDashboard from "./components/TasksDashboard";
+import { TasksProvider } from "./context/TasksContainer";
 
 function App() {
   return (
     <div>
-      <TasksDashboard />
+      <TasksProvider>
+        <TasksDashboard />
+      </TasksProvider>
     </div>
   );
 }

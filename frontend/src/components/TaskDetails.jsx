@@ -1,20 +1,30 @@
 import React, { useState } from "react";
 import Card from "react-bootstrap/Card";
 import EditTaskModal from "./EditTaskModal";
+import {
+  StateActions,
+  useTasksState,
+  useTasksDispatch,
+} from "../context/TasksContainer";
 
-export const TaskDetails = ({ tasks, selectedTask }) => {
-  const taskData = tasks.find((task) => task.id === selectedTask);
+export const TaskDetails = () => {
   const [showEditTaskForm, setShowEditTaskForm] = useState(false);
+  const { tasks, selectedTask } = useTasksState();
+  const dispatch = useTasksDispatch();
+  const taskData = tasks.find((task) => task.id === selectedTask);
 
   const handleTaskEdit = () => setShowEditTaskForm(true);
+
   const handleTaskDelete = () => {
     fetch(`http://127.0.0.1:5000/tasks/${taskData.id}`, {
       method: "DELETE",
     })
       .then((response) => {
         if (response.ok) {
-          console.log(response.body);
-          console.log("deleted");
+          dispatch({
+            type: StateActions.DELETE_TASK,
+            payload: taskData.id
+          })
         } else {
           console.error("Error deleting task:", response.statusText);
         }
@@ -26,11 +36,13 @@ export const TaskDetails = ({ tasks, selectedTask }) => {
 
   return (
     <>
-      {taskData && <EditTaskModal
-        show={showEditTaskForm}
-        task={taskData}
-        onHide={() => setShowEditTaskForm(false)}
-      />}
+      {taskData && (
+        <EditTaskModal
+          show={showEditTaskForm}
+          task={taskData}
+          onHide={() => setShowEditTaskForm(false)}
+        />
+      )}
 
       <Card style={{ width: "100%" }}>
         {taskData && (
@@ -47,7 +59,7 @@ export const TaskDetails = ({ tasks, selectedTask }) => {
                     width="25"
                     height="25"
                     fill="currentColor"
-                    class="bi bi-pen"
+                    className="bi bi-pen"
                     viewBox="0 0 16 16"
                   >
                     <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001m-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708z" />

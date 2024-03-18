@@ -2,11 +2,13 @@ import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
+import { StateActions, useTasksDispatch } from "../context/TasksContainer";
 
 const NewTaskModal = (props) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [completed, setCompleted] = useState(false);
+  const dispatch = useTasksDispatch();
 
   const handleSubmit = () => {
     fetch("http://127.0.0.1:5000/tasks", {
@@ -18,12 +20,16 @@ const NewTaskModal = (props) => {
     })
       .then((response) => {
         if (response.ok) {
-          props.onHide();
-          setTitle("");
-          setDescription("");
+          return response.json(); // Parse the JSON response
         } else {
-          console.error("Error adding task:", response.statusText);
+          throw new Error(`Error adding task: ${response.statusText}`);
         }
+      })
+      .then((data) => {
+        dispatch({ type: StateActions.ADD_TASK, payload: data });
+        props.onHide();
+        setTitle("");
+        setDescription("");
       })
       .catch((error) => {
         console.error("Error adding task:", error);
@@ -85,9 +91,7 @@ const NewTaskModal = (props) => {
         </Form>
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={handleSubmit}>
-          Add
-        </Button>
+        <Button onClick={handleSubmit}>Add</Button>
       </Modal.Footer>
     </Modal>
   );
