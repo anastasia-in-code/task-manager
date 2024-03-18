@@ -2,7 +2,9 @@
 
 # dependencies
 /frontend/node_modules
-/backend/instance
+
+#db
+backend/instance/
 
 # testing
 /coverage
