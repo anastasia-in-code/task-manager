@@ -3,6 +3,7 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import { StateActions, useTasksDispatch } from "../context/TasksContainer";
+import TasksAPI from "../api/TasksAPI";
 
 const EditTaskModal = (props) => {
   const dispatch = useTasksDispatch();
@@ -10,33 +11,23 @@ const EditTaskModal = (props) => {
   const [description, setDescription] = useState(props.task.description);
   const [completed, setCompleted] = useState(props.task.completed);
 
-  const handleSubmit = () => {
-    fetch(`http://127.0.0.1:5000/tasks/${props.task.id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
+  const handleSubmit = async () => {
+    const task = await TasksAPI.updateTask(
+      props.task.id,
+      title,
+      description,
+      completed
+    );
+    dispatch({
+      type: StateActions.UPDATE_TASK,
+      payload: {
+        id: props.task.id,
+        title,
+        description,
+        completed,
       },
-      body: JSON.stringify({ title, description, completed }),
-    })
-      .then((response) => {
-        if (response.ok) {
-          dispatch({
-            type: StateActions.UPDATE_TASK,
-            payload: {
-              id: props.task.id,
-              title,
-              description,
-              completed,
-            },
-          });
-          props.onHide();
-        } else {
-          console.error("Error adding task:", response.statusText);
-        }
-      })
-      .catch((error) => {
-        console.error("Error adding task:", error);
-      });
+    });
+    props.onHide();
   };
 
   const handleTitleChange = (e) => {

@@ -3,6 +3,7 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import { StateActions, useTasksDispatch } from "../context/TasksContainer";
+import TasksAPI from "../api/TasksAPI";
 
 const NewTaskModal = (props) => {
   const [title, setTitle] = useState("");
@@ -10,31 +11,15 @@ const NewTaskModal = (props) => {
   const [completed, setCompleted] = useState(false);
   const dispatch = useTasksDispatch();
 
-  const handleSubmit = () => {
-    fetch("http://127.0.0.1:5000/tasks", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ title, description, completed }),
-    })
-      .then((response) => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error(`Error adding task: ${response.statusText}`);
-        }
-      })
-      .then((data) => {
-        dispatch({ type: StateActions.ADD_TASK, payload: data });
-        dispatch({ type: StateActions.SET_SELECTED_TASK, payload: data.id });
-        props.onHide();
-        setTitle("");
-        setDescription("");
-      })
-      .catch((error) => {
-        console.error("Error adding task:", error);
-      });
+  const handleSubmit = async () => {
+    const newTask = await TasksAPI.addNewTask(title, description, completed);
+
+    dispatch({ type: StateActions.ADD_TASK, payload: newTask });
+    dispatch({ type: StateActions.SET_SELECTED_TASK, payload: newTask.id });
+    props.onHide();
+    setTitle("");
+    setDescription("");
+    setCompleted(false);
   };
 
   const handleTitleChange = (e) => {

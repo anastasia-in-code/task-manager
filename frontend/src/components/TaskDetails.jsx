@@ -6,6 +6,7 @@ import {
   useTasksState,
   useTasksDispatch,
 } from "../context/TasksContainer";
+import TasksAPI from "../api/TasksAPI";
 
 export const TaskDetails = () => {
   const [showEditTaskForm, setShowEditTaskForm] = useState(false);
@@ -15,23 +16,12 @@ export const TaskDetails = () => {
 
   const handleTaskEdit = () => setShowEditTaskForm(true);
 
-  const handleTaskDelete = () => {
-    fetch(`http://127.0.0.1:5000/tasks/${taskData.id}`, {
-      method: "DELETE",
-    })
-      .then((response) => {
-        if (response.ok) {
-          dispatch({
-            type: StateActions.DELETE_TASK,
-            payload: taskData.id
-          })
-        } else {
-          console.error("Error deleting task:", response.statusText);
-        }
+  const handleTaskDelete = async () => {
+    await TasksAPI.deleteTask(taskData.id)
+    dispatch({
+        type: StateActions.DELETE_TASK,
+        payload: taskData.id
       })
-      .catch((error) => {
-        console.error("Error deleting task:", error);
-      });
   };
 
   return (
