@@ -89,6 +89,7 @@ def delete_task(id):
     try: 
         task = Task.query.get_or_404(id)
         db.session.delete(task)
+        db.session.commit()
         logging.info(f"Task with id {id} deleted successfully")
         return jsonify({'message': 'Task deleted successfully'}), HTTPStatus.OK
     except NotFound:
