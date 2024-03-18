@@ -20,13 +20,14 @@ const NewTaskModal = (props) => {
     })
       .then((response) => {
         if (response.ok) {
-          return response.json(); // Parse the JSON response
+          return response.json();
         } else {
           throw new Error(`Error adding task: ${response.statusText}`);
         }
       })
       .then((data) => {
         dispatch({ type: StateActions.ADD_TASK, payload: data });
+        dispatch({ type: StateActions.SET_SELECTED_TASK, payload: data.id });
         props.onHide();
         setTitle("");
         setDescription("");
