@@ -35,11 +35,15 @@ const NewTaskModal = (props) => {
   };
 
   const handleTitleChange = (e) => {
-    setTitle(e.target.value);
+    if (e.target.value.length <= 50) {
+      setTitle(e.target.value);
+    }
   };
 
   const handleDescriptionChange = (e) => {
-    setDescription(e.target.value);
+    if (e.target.value.length <= 255) {
+      setDescription(e.target.value);
+    }
   };
 
   const handleCompletedChange = (e) => {
