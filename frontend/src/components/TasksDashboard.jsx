@@ -5,8 +5,9 @@ import NewTaskModal from "./NewTaskModal";
 import { useTasksDispatch, StateActions } from "../context/TasksContainer";
 import TasksAPI from "../api/TasksAPI";
 import Alert from "react-bootstrap/Alert";
+import Header from "./Header";
 
-const TasksDashboard = () => {
+const TasksDashboard = ({setIsLoggedIn}) => {
   const [showNewTaskForm, setShowNewTaskForm] = useState(false);
   const [error, setError] = useState(null);
   const dispatch = useTasksDispatch();
@@ -33,21 +34,24 @@ const TasksDashboard = () => {
   }, []);
 
   return (
-    <div style={{ display: "flex" }}>
-      <TaskList showNewTaskModal={() => setShowNewTaskForm(true)} />
-      {error ? (
-        <div className="w-100 position-absolute bottom-0 end-0 p-3">
-          <Alert variant="danger">{error}</Alert>
-        </div>
-      ) : (
-        <TaskDetails />
-      )}
-      {showNewTaskForm && !error && (
-        <NewTaskModal
-          show={showNewTaskForm}
-          onHide={() => setShowNewTaskForm(false)}
-        />
-      )}
+    <div>
+      <Header setIsLoggedIn={setIsLoggedIn}/>
+      <div style={{ display: "flex" }}>
+        <TaskList showNewTaskModal={() => setShowNewTaskForm(true)} />
+        {error ? (
+          <div className="w-100 position-absolute bottom-0 end-0 p-3">
+            <Alert variant="danger">{error}</Alert>
+          </div>
+        ) : (
+          <TaskDetails />
+        )}
+        {showNewTaskForm && !error && (
+          <NewTaskModal
+            show={showNewTaskForm}
+            onHide={() => setShowNewTaskForm(false)}
+          />
+        )}
+      </div>
     </div>
   );
 };

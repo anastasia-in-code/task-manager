@@ -16,7 +16,7 @@ function App() {
     <div>
       {isLoggedIn ? (
         <TasksProvider>
-          <TasksDashboard />
+          <TasksDashboard setIsLoggedIn={setIsLoggedIn} />
         </TasksProvider>
       ) : (
         <Auth onLogin={() => setIsLoggedIn(true)} />
