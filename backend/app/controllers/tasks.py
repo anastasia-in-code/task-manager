@@ -4,6 +4,7 @@ import logging
 from flask import Blueprint, abort, jsonify, request
 from app.models import Task
 from app import db
+from flask_jwt_extended import jwt_required
 
 tasks_bp = Blueprint('tasks', __name__)
 
@@ -23,6 +24,7 @@ Returns:
             - 500 (INTERNAL SERVER ERROR): An error occurred while processing the request.
 """
 @tasks_bp.route('/tasks', methods=['GET'])
+@jwt_required()
 def get_tasks():
     try:
         page = request.args.get('page', 1, type=int)
@@ -55,6 +57,7 @@ Returns:
             - 500 (INTERNAL SERVER ERROR): An error occurred while processing the request.
 """
 @tasks_bp.route('/tasks', methods=['POST'])
+@jwt_required()
 def add_task():
     try: 
         data = request.json
@@ -85,6 +88,7 @@ Returns:
             - 500 (INTERNAL SERVER ERROR): An error occurred while processing the request.
 """
 @tasks_bp.route('/tasks/<int:id>', methods=['DELETE'])
+@jwt_required()
 def delete_task(id):
     try: 
         task = Task.query.get_or_404(id)
@@ -118,6 +122,7 @@ Returns:
             - 500 (INTERNAL SERVER ERROR): An error occurred while processing the request.
 """
 @tasks_bp.route('/tasks/<int:id>', methods=['PUT'])
+@jwt_required()
 def update_task(id):
     try: 
         task = Task.query.get_or_404(id)
