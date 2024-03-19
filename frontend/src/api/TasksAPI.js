@@ -5,6 +5,19 @@ const BASE_URL = `http://127.0.0.1:5000/tasks`;
 class TasksAPI {
   constructor(url) {
     this.BASE_URL = url;
+
+    axios.interceptors.request.use(
+      (config) => {
+        const token = localStorage.getItem("access_token");
+        if (token) {
+          config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
+      },
+      (error) => {
+        return Promise.reject(error);
+      }
+    );
   }
   /**
    * Retrieves a list of tasks from the specified API endpoint.
