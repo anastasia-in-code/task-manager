@@ -84,7 +84,7 @@ export const TaskDetails = () => {
                 <OverlayTrigger
                   placement="bottom"
                   delay={{ show: 250, hide: 400 }}
-                  overlay={renderEditTooltip}
+                  overlay={renderDeleteTooltip}
                 >
                   <button
                     onClick={handleTaskDelete}
