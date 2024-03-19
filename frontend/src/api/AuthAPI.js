@@ -13,7 +13,6 @@ class AuthAPI {
         username: username,
         password: password,
       });
-      console.log(response)
 
       return response.data.access_token;
     } catch (error) {
