@@ -4,7 +4,7 @@ import logging
 from flask import Blueprint, abort, jsonify, request
 from app.models import Task
 from app import db
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 tasks_bp = Blueprint('tasks', __name__)
 
@@ -27,13 +27,16 @@ Returns:
 @jwt_required()
 def get_tasks():
     try:
+        user_id = get_jwt_identity()
+
+
         page = request.args.get('page', 1, type=int)
         per_page = request.args.get('per_page', 10, type=int)
         
         if page < 1 or per_page < 1:
             return jsonify({'error': 'Invalid page or per_page value.'}), HTTPStatus.BAD_REQUEST
         
-        tasks = Task.query.paginate(page=page, per_page=per_page)
+        tasks = Task.query.filter_by(user_id=user_id).paginate(page=page, per_page=per_page)
         task_data = [{'id': task.id, 'title': task.title, 'description': task.description, 'completed': task.completed} for task in tasks.items]
         
         return jsonify(task_data), HTTPStatus.OK
@@ -60,10 +63,12 @@ Returns:
 @jwt_required()
 def add_task():
     try: 
+        user_id = get_jwt_identity()
+
         data = request.json
         if 'title' not in data or len(data['title']) < 1:
             return jsonify({'error': 'Title is required'}), HTTPStatus.BAD_REQUEST
-        new_task = Task(title=data['title'], description=data.get('description', None), completed=data.get('completed', False))
+        new_task = Task(title=data['title'], description=data.get('description', None), completed=data.get('completed', False), user_id=user_id)
         db.session.add(new_task)
         db.session.commit()
         return jsonify({'id': new_task.id, 'title': new_task.title, 'description': new_task.description, 'completed': new_task.completed}), HTTPStatus.CREATED

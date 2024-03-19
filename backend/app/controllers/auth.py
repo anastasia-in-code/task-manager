@@ -47,7 +47,7 @@ def login():
         if user is None or not bcrypt.checkpw(password.encode('utf-8'), user.password):
             return jsonify({'message': 'Invalid username or password'}), HTTPStatus.UNAUTHORIZED
 
-        access_token = create_access_token(identity=username)
+        access_token = create_access_token(identity=user.id)
         return jsonify({'access_token': access_token}), HTTPStatus.OK
 
     except Exception as e:
