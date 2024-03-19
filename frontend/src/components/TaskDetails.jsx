@@ -87,7 +87,7 @@ export const TaskDetails = () => {
                   overlay={renderEditTooltip}
                 >
                   <button
-                    onClick={renderDeleteTooltip}
+                    onClick={handleTaskDelete}
                     className="icon-btn"
                     aria-label="Delete Task"
                   >
