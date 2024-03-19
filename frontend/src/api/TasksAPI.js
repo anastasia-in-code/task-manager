@@ -19,9 +19,11 @@ class TasksAPI {
           per_page: 100,
         },
       });
+
       return response.data;
     } catch (error) {
       console.error("Error occurred while fetching tasks", error);
+      throw error
     }
   }
 
@@ -44,6 +46,7 @@ class TasksAPI {
       return response.data;
     } catch (error) {
       console.error("Error occurred while updating task:", error);
+      throw error
     }
   }
 
@@ -65,6 +68,7 @@ class TasksAPI {
       return response.data;
     } catch (error) {
       console.error("Error occurred while adding task:", error);
+      throw error
     }
   }
 

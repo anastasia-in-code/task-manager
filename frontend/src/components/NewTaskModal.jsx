@@ -1,49 +1,49 @@
 import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import Alert from "react-bootstrap/Alert";
 import Form from "react-bootstrap/Form";
 import { StateActions, useTasksDispatch } from "../context/TasksContainer";
 import TasksAPI from "../api/TasksAPI";
 
-/**
- * Renders a modal window for adding a new task.
- * @param {Object} props - The props passed to the component.
- * @param {boolean} props.show - Controls the visibility of the modal.
- * @param {function} props.onHide - Handles the close event.
- * @returns {JSX.Element} - The rendered modal window.
- */
-const NewTaskModal = (props) => {
+const NewTaskModal = ({ show, onHide }) => {
   const dispatch = useTasksDispatch();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [completed, setCompleted] = useState(false);
   const [validated, setValidated] = useState(false);
+  const [error, setError] = useState(null);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     setValidated(true);
+    setError(null); // Reset the error state
 
-    const newTask = await TasksAPI.addNewTask(title, description, completed);
+    try {
+      const newTask = await TasksAPI.addNewTask(
+        title.trim(),
+        description.trim(),
+        completed
+      );
 
-    dispatch({ type: StateActions.ADD_TASK, payload: newTask });
+      dispatch({ type: StateActions.ADD_TASK, payload: newTask });
 
-    props.onHide();
-    setTitle("");
-    setDescription("");
-    setCompleted(false);
+      onHide();
+      setTitle("");
+      setDescription("");
+      setCompleted(false);
+    } catch (e) {
+      setError(e.message);
+    }
   };
 
   const handleTitleChange = (e) => {
-    if (e.target.value.length <= 50) {
-      setTitle(e.target.value);
-    }
+    setTitle(e.target.value.trim());
   };
 
   const handleDescriptionChange = (e) => {
-    if (e.target.value.length <= 255) {
-      setDescription(e.target.value);
-    }
+    setDescription(e.target.value.trim());
   };
 
   const handleCompletedChange = (e) => {
@@ -52,7 +52,8 @@ const NewTaskModal = (props) => {
 
   return (
     <Modal
-      {...props}
+      show={show}
+      onHide={onHide}
       size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
@@ -70,6 +71,7 @@ const NewTaskModal = (props) => {
               required
               type="text"
               value={title}
+              maxLength={50}
               onChange={handleTitleChange}
             />
             <Form.Control.Feedback type="invalid">
@@ -91,11 +93,17 @@ const NewTaskModal = (props) => {
               as="textarea"
               rows={5}
               value={description}
+              maxLength={255}
               onChange={handleDescriptionChange}
             />
           </Form.Group>
         </Modal.Body>
         <Modal.Footer>
+          {error && (
+            <div className="w-100 p-3">
+              <Alert variant="danger">{error}</Alert>
+            </div>
+          )}
           <Button type="submit">Add</Button>
         </Modal.Footer>
       </Form>

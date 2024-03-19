@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import Alert from "react-bootstrap/Alert";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
@@ -10,36 +11,38 @@ const EditTaskModal = (props) => {
   const [title, setTitle] = useState(props.task.title);
   const [description, setDescription] = useState(props.task.description);
   const [completed, setCompleted] = useState(props.task.completed);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    setTitle(props.task.title);
+    setDescription(props.task.description);
+    setCompleted(props.task.completed);
+  }, [props.task]);
 
   const handleSubmit = async () => {
-    const task = await TasksAPI.updateTask(
-      props.task.id,
-      title,
-      description,
-      completed
-    );
-    dispatch({
-      type: StateActions.UPDATE_TASK,
-      payload: {
-        id: props.task.id,
-        title,
-        description,
-        completed,
-      },
-    });
-    props.onHide();
-  };
-  
-  const handleTitleChange = (e) => {
-    if (e.target.value.length <= 50) {
-      setTitle(e.target.value);
+    try {
+      await TasksAPI.updateTask(props.task.id, title, description, completed);
+      dispatch({
+        type: StateActions.UPDATE_TASK,
+        payload: {
+          id: props.task.id,
+          title,
+          description,
+          completed,
+        },
+      });
+      props.onHide();
+    } catch (e) {
+      setError(e.message);
     }
+  };
+
+  const handleTitleChange = (e) => {
+    setTitle(e.target.value);
   };
 
   const handleDescriptionChange = (e) => {
-    if (e.target.value.length <= 255) {
-      setDescription(e.target.value);
-    }
+    setDescription(e.target.value);
   };
 
   const handleCompletedChange = (e) => {
@@ -64,6 +67,7 @@ const EditTaskModal = (props) => {
               type="text"
               value={title}
               onChange={handleTitleChange}
+              maxLength={50}
             />
           </Form.Group>
           <Form.Group controlId="formBasicCheckbox">
@@ -82,11 +86,17 @@ const EditTaskModal = (props) => {
               rows={5}
               value={description}
               onChange={handleDescriptionChange}
+              maxLength={255}
             />
           </Form.Group>
         </Form>
       </Modal.Body>
       <Modal.Footer>
+        {error && (
+          <div className="w-100 p-3">
+            <Alert variant="danger">{error}</Alert>
+          </div>
+        )}
         <Button onClick={handleSubmit}>Update</Button>
       </Modal.Footer>
     </Modal>
