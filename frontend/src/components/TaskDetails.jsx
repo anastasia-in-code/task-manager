@@ -1,6 +1,8 @@
 import React, { useState, useMemo } from "react";
 import Card from "react-bootstrap/Card";
 import EditTaskModal from "./EditTaskModal";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Tooltip from "react-bootstrap/Tooltip";
 import {
   StateActions,
   useTasksState,
@@ -34,6 +36,18 @@ export const TaskDetails = () => {
     }
   };
 
+  const renderEditTooltip = (props) => (
+    <Tooltip id="button-tooltip" {...props}>
+      Edit task
+    </Tooltip>
+  );
+
+  const renderDeleteTooltip = (props) => (
+    <Tooltip id="button-tooltip" {...props}>
+      Delete task
+    </Tooltip>
+  );
+
   return (
     <>
       {showEditTaskForm && (
@@ -53,20 +67,33 @@ export const TaskDetails = () => {
             >
               <span>{taskData.title}</span>
               <div>
-                <button
-                  onClick={handleTaskEdit}
-                  className="icon-btn"
-                  aria-label="Edit Task"
+                <OverlayTrigger
+                  placement="left"
+                  delay={{ show: 250, hide: 400 }}
+                  overlay={renderEditTooltip}
                 >
-                  <PenIcon />
-                </button>
-                <button
-                  onClick={handleTaskDelete}
-                  className="icon-btn"
-                  aria-label="Delete Task"
+                  <button
+                    onClick={handleTaskEdit}
+                    className="icon-btn"
+                    aria-label="Edit Task"
+                  >
+                    <PenIcon />
+                  </button>
+                </OverlayTrigger>
+
+                <OverlayTrigger
+                  placement="bottom"
+                  delay={{ show: 250, hide: 400 }}
+                  overlay={renderEditTooltip}
                 >
-                  <TrashIcon />
-                </button>
+                  <button
+                    onClick={renderDeleteTooltip}
+                    className="icon-btn"
+                    aria-label="Delete Task"
+                  >
+                    <TrashIcon />
+                  </button>
+                </OverlayTrigger>
               </div>
             </Card.Title>
             <Card.Text>

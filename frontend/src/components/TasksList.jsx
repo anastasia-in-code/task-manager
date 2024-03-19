@@ -1,5 +1,7 @@
 import React from "react";
 import ListGroup from "react-bootstrap/ListGroup";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Tooltip from "react-bootstrap/Tooltip";
 import {
   StateActions,
   useTasksState,
@@ -19,6 +21,12 @@ const TaskList = ({ showNewTaskModal }) => {
     });
   };
 
+  const renderTooltip = (props) => (
+    <Tooltip id="button-tooltip" {...props}>
+      Add new task
+    </Tooltip>
+  );
+
   return (
     <div
       className="d-flex flex-column flex-shrink-0 p-3"
@@ -29,13 +37,19 @@ const TaskList = ({ showNewTaskModal }) => {
           <NoteIcon />
           <span className="fs-4">Tasks</span>
         </div>
-        <button
-          className="ms-auto icon-btn"
-          onClick={showNewTaskModal}
-          aria-label="Add Task"
+        <OverlayTrigger
+          placement="left"
+          delay={{ show: 250, hide: 400 }}
+          overlay={renderTooltip}
         >
-          <TasksIcon />
-        </button>
+          <button
+            className="ms-auto icon-btn"
+            onClick={showNewTaskModal}
+            aria-label="Add Task"
+          >
+            <TasksIcon />
+          </button>
+        </OverlayTrigger>
       </div>
 
       <hr />
