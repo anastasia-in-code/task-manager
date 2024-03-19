@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Form, Button, Alert } from "react-bootstrap";
 import AuthAPI from "../api/AuthAPI";
 
-const Register = ({ onRegister, setHaveAccount }) => {
+const Register = ({ setHaveAccount }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
@@ -47,10 +47,10 @@ const Register = ({ onRegister, setHaveAccount }) => {
 
         {error && <Alert variant="danger">{error}</Alert>}
 
-        <Button variant="primary" type="submit">
+        <Button className="mt-3" variant="primary" type="submit">
           Register
         </Button>
-        <Button variant="primary" onClick={() => setHaveAccount(true)}>
+        <Button className="mt-3 mx-3" variant="primary" onClick={() => setHaveAccount(true)}>
           Already have an account?
         </Button>
       </Form>

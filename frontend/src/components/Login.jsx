@@ -10,8 +10,8 @@ const Login = ({ onLogin, setHaveAccount }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const token = await AuthAPI.login(username, password)
-      localStorage.setItem('access_token', token);
+      const token = await AuthAPI.login(username, password);
+      localStorage.setItem("access_token", token);
       onLogin();
     } catch (error) {
       setError("Invalid username or password");
@@ -46,10 +46,14 @@ const Login = ({ onLogin, setHaveAccount }) => {
 
         {error && <Alert variant="danger">{error}</Alert>}
 
-        <Button variant="primary" type="submit">
+        <Button className="mt-3" variant="primary" type="submit">
           Submit
         </Button>
-        <Button variant="primary" onClick={() => setHaveAccount(false)}>
+        <Button
+          className="mt-3 mx-3"
+          variant="primary"
+          onClick={() => setHaveAccount(false)}
+        >
           Don't have an account?
         </Button>
       </Form>
