@@ -5,9 +5,8 @@ import NewTaskModal from "./NewTaskModal";
 import { useTasksDispatch, StateActions } from "../context/TasksContainer";
 import TasksAPI from "../api/TasksAPI";
 import Alert from "react-bootstrap/Alert";
-import Header from "./Header";
 
-const TasksDashboard = ({setIsLoggedIn}) => {
+const TasksDashboard = () => {
   const [showNewTaskForm, setShowNewTaskForm] = useState(false);
   const [error, setError] = useState(null);
   const dispatch = useTasksDispatch();
@@ -34,8 +33,6 @@ const TasksDashboard = ({setIsLoggedIn}) => {
   }, []);
 
   return (
-    <div>
-      <Header setIsLoggedIn={setIsLoggedIn}/>
       <div style={{ display: "flex" }}>
         <TaskList showNewTaskModal={() => setShowNewTaskForm(true)} />
         {error ? (
@@ -52,7 +49,6 @@ const TasksDashboard = ({setIsLoggedIn}) => {
           />
         )}
       </div>
-    </div>
   );
 };
 

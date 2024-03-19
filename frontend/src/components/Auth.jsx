@@ -3,7 +3,7 @@ import Register from "./Register";
 import React, { useState } from "react";
 
 const Auth = ({ onLogin }) => {
-  const [haveAccount, setHaveAccount] = useState(false);
+  const [haveAccount, setHaveAccount] = useState(true);
   return haveAccount ? (
     <Login onLogin={onLogin} setHaveAccount={setHaveAccount} />
   ) : (

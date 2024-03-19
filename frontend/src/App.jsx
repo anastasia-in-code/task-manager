@@ -3,6 +3,7 @@ import React, {useState, useEffect} from 'react'
 import TasksDashboard from "./components/TasksDashboard";
 import { TasksProvider } from "./context/TasksContainer";
 import Auth from "./components/Auth";
+import Header from "./components/Header";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -16,6 +17,7 @@ function App() {
     <div>
       {isLoggedIn ? (
         <TasksProvider>
+          <Header setIsLoggedIn={setIsLoggedIn}/>
           <TasksDashboard setIsLoggedIn={setIsLoggedIn} />
         </TasksProvider>
       ) : (
