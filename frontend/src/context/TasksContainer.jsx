@@ -23,7 +23,7 @@ const tasksReducer = (state, action) => {
     case StateActions.SET_SELECTED_TASK:
       return { ...state, selectedTask: action.payload };
     case StateActions.ADD_TASK:
-      return { ...state, tasks: [...state.tasks, action.payload] };
+      return { ...state, tasks: [...state.tasks, action.payload], selectedTask: action.payload.id };
     case StateActions.UPDATE_TASK:
       return { ...state, tasks: state.tasks.map(task => task.id == action.payload.id ? action.payload : {...task}) };
     case StateActions.DELETE_TASK:

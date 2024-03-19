@@ -28,11 +28,14 @@ const TasksDashboard = () => {
 
   return (
     <div style={{ display: "flex" }}>
-      <TaskList setShowNewTaskForm={setShowNewTaskForm} />
-      <NewTaskModal
-        show={showNewTaskForm}
-        onHide={() => setShowNewTaskForm(false)}
-      />
+      <TaskList showNewTaskModal={() => setShowNewTaskForm(true)} />
+      {showNewTaskForm &&
+        <NewTaskModal
+          show={showNewTaskForm}
+          onHide={() => setShowNewTaskForm(false)}
+        />
+      }
+
       <TaskDetails />
     </div>
   );

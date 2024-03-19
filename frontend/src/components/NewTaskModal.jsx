@@ -5,17 +5,29 @@ import Form from "react-bootstrap/Form";
 import { StateActions, useTasksDispatch } from "../context/TasksContainer";
 import TasksAPI from "../api/TasksAPI";
 
+/**
+ * Renders a modal window for adding a new task.
+ * @param {Object} props - The props passed to the component.
+ * @param {boolean} props.show - Controls the visibility of the modal.
+ * @param {function} props.onHide - Handles the close event.
+ * @returns {JSX.Element} - The rendered modal window.
+ */
 const NewTaskModal = (props) => {
+  const dispatch = useTasksDispatch();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [completed, setCompleted] = useState(false);
-  const dispatch = useTasksDispatch();
+  const [validated, setValidated] = useState(false);
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    setValidated(true);
+
     const newTask = await TasksAPI.addNewTask(title, description, completed);
 
     dispatch({ type: StateActions.ADD_TASK, payload: newTask });
-    dispatch({ type: StateActions.SET_SELECTED_TASK, payload: newTask.id });
+
     props.onHide();
     setTitle("");
     setDescription("");
@@ -46,15 +58,19 @@ const NewTaskModal = (props) => {
           Add New Task
         </Modal.Title>
       </Modal.Header>
-      <Modal.Body>
-        <Form>
-          <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+      <Form validated={validated} onSubmit={handleSubmit}>
+        <Modal.Body>
+          <Form.Group className="mb-3" controlId="title">
             <Form.Label>Title</Form.Label>
             <Form.Control
+              required
               type="text"
               value={title}
               onChange={handleTitleChange}
             />
+            <Form.Control.Feedback type="invalid">
+              Please provide a Title.
+            </Form.Control.Feedback>
           </Form.Group>
           <Form.Group controlId="formBasicCheckbox">
             <Form.Check
@@ -74,11 +90,11 @@ const NewTaskModal = (props) => {
               onChange={handleDescriptionChange}
             />
           </Form.Group>
-        </Form>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button onClick={handleSubmit}>Add</Button>
-      </Modal.Footer>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button type="submit">Add</Button>
+        </Modal.Footer>
+      </Form>
     </Modal>
   );
 };

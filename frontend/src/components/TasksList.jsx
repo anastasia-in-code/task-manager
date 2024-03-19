@@ -6,7 +6,7 @@ import {
   useTasksDispatch,
 } from "../context/TasksContainer";
 
-const TaskList = ({ setShowNewTaskForm }) => {
+const TaskList = ({ showNewTaskModal }) => {
   const { tasks, selectedTask } = useTasksState();
   const dispatch = useTasksDispatch();
 
@@ -39,7 +39,7 @@ const TaskList = ({ setShowNewTaskForm }) => {
         </div>
         <a
           className="ms-auto cursor-pointer"
-          onClick={() => setShowNewTaskForm(true)}
+          onClick={showNewTaskModal}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
