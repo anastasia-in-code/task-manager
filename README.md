@@ -30,6 +30,13 @@ You are free to modify the code in any way you like, but ensure your final resul
 ## Instructions
 
 ### Installation
+Task Manager is a simple web application for managing tasks. It is built using Flask for the backend and React for the frontend.
+
+Features
+* Create, read, update, and delete tasks
+* Mark tasks as completed
+* Filter tasks by status
+
 Backend (Flask)
 * Clone the repository: git clone https://github.com/your-username/task-manager.git
 * Navigate to the backend directory: cd task-manager/backend
