@@ -29,6 +29,26 @@ You are free to modify the code in any way you like, but ensure your final resul
 
 ## Instructions
 
+### Installation
+Backend (Flask)
+* Clone the repository: git clone https://github.com/your-username/task-manager.git
+* Navigate to the backend directory: cd task-manager/backend
+* Install dependencies: pip install -r requirements.txt
+* Start the development server: flask run
+The backend server should now be running at http://localhost:5000.
+
+
+Frontend (React)
+* Navigate to the frontend directory: cd task-manager/frontend
+* Install dependencies: npm install
+* Start the development server: npm start
+The frontend development server should now be running at http://localhost:3000.
+
+### Usage
+Open your browser and navigate to http://localhost:3000 to access the Task Manager application.
+Use the interface to create, update, and delete tasks.
+
+
 #### Development
 Implement the required features as described above.
 
