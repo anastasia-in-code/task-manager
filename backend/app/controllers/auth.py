@@ -18,9 +18,6 @@ def register():
         if not username or not password:
             return jsonify({'message': 'Username and password are required'}), HTTPStatus.BAD_REQUEST
 
-        if len(password) < 8:
-            return jsonify({'message': 'Password must be at least 8 characters long'}), HTTPStatus.BAD_REQUEST
-
         user = User.query.filter_by(username=username).first()
 
         if user is not None: 
