@@ -38,7 +38,6 @@ Features
 * Filter tasks by status
 
 Backend (Flask)
-* Clone the repository: git clone https://github.com/your-username/task-manager.git
 * Navigate to the backend directory: cd task-manager/backend
 * Install dependencies: pip install -r requirements.txt
 * Start the development server: flask run
